@@ -3,13 +3,10 @@ package bank.blog.controller.v1;
 import bank.blog.controller.v1.dto.PopularKeywordBundleV1;
 import bank.blog.controller.v1.dto.PopularKeywordV1;
 import bank.blog.controller.v1.dto.ResponseV1;
-import bank.blog.exception.KeywordNotFoundException;
-import bank.blog.service.keyword.GetPopularKeywordService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
 
 @ActiveProfiles("h2")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
