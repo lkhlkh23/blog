@@ -4,6 +4,7 @@ import bank.blog.domain.keyword.PopularKeyword;
 import bank.blog.exception.KeywordNotFoundException;
 import bank.blog.infra.keyword.GetPopularKeywordRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class GetPopularKeywordServiceImpl implements GetPopularKeywordService {
 
     private final GetPopularKeywordRepository keywordRepository;
 
+    @Cacheable(cacheNames = "getPopularKeywords", key = "#p0", unless = "#result.isEmpty()")
     @Transactional(readOnly = true)
     @Override
     public List<PopularKeyword> getPopularKeywords(final int limit) {
