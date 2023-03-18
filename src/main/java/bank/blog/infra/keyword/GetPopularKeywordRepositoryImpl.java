@@ -16,7 +16,7 @@ public class GetPopularKeywordRepositoryImpl implements GetPopularKeywordReposit
 
     @Override
     public List<PopularKeyword> getPopularKeywords() {
-        return keywordJpaRepository.findAll(Sort.by(Sort.Direction.ASC, "total"))
+        return keywordJpaRepository.findAll(Sort.by(Sort.Direction.DESC, "total"))
                                    .stream()
                                    .map(PopularKeywordMapper.INSTANCE::from)
                                    .collect(Collectors.toList());

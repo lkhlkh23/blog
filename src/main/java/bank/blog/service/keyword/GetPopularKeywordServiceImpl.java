@@ -22,9 +22,9 @@ public class GetPopularKeywordServiceImpl implements GetPopularKeywordService {
     @Override
     public List<PopularKeyword> getPopularKeywords(final int limit) {
         final List<PopularKeyword> keywords = keywordRepository.getPopularKeywords()
-                                                                .stream()
-                                                                .limit(limit)
-                                                                .collect(Collectors.toList());
+                                                               .stream()
+                                                               .limit(limit)
+                                                               .collect(Collectors.toList());
         if(keywords.isEmpty()) {
             throw new KeywordNotFoundException();
         }
