@@ -14,3 +14,12 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+feign:
+  kakao:
+    url: https://dapi.kakao.com
+    key:
+      native: cdccb28331810b1773f8eec6452db48b
+      rest: KakaoAK d4364f4015d7f9f49fc50977d0896596
+      js: 06fa4a7e3fe165a5e0f253834f0d0951
+      admin: a8bfa2a4d2e2aecc0ba239b20e87e91e
