@@ -20,6 +20,7 @@ repositories {
 
 ext {
 	set('springCloudVersion', "2021.0.6")
+	set('mapstructVersion', "1.4.2.Final")
 }
 
 dependencies {
@@ -31,11 +32,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.3'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
