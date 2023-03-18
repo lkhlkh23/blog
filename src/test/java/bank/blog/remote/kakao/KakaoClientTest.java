@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("h2")
@@ -23,6 +24,7 @@ class KakaoClientTest {
         final KakaoSearchResponse response = sut.search("카카오뱅크채용", "accuracy", 1, 10);
         final List<KakaoDocument> documents = response.getDocuments();
 
+        assertFalse(documents.isEmpty());
         for (final KakaoDocument document : documents) {
             assertNotNull(document.getTitle());
             assertNotNull(document.getContents());

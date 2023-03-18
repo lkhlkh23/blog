@@ -13,6 +13,5 @@ public class NaverItem {
     private String description;
     @JsonProperty("bloggername") private String bloggerName;
     @JsonProperty("bloggerlink") private String bloggerLink;
-    // @JsonProperty("postdate") private LocalDateTime postDate;
 
 }
