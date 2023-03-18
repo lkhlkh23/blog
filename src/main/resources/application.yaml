@@ -19,7 +19,9 @@ feign:
   kakao:
     url: https://dapi.kakao.com
     key:
-      native: cdccb28331810b1773f8eec6452db48b
-      rest: KakaoAK d4364f4015d7f9f49fc50977d0896596
-      js: 06fa4a7e3fe165a5e0f253834f0d0951
-      admin: a8bfa2a4d2e2aecc0ba239b20e87e91e
+      rest: ENC(IloiX1Sc/pg74umUTYye1pt4SDJ0zHn60RhY1TXRmA5mNNl9M7Qyor7x4CQ6IrkJ7xRNPUPjfdQ=)
+
+jasypt:
+  encryptor:
+    password: doblee
+    bean: standardPBEStringEncryptor

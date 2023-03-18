@@ -1,6 +1,5 @@
 package bank.blog.remote.kakao;
 
-import bank.blog.remote.kakao.dto.KakaoDocument;
 import bank.blog.remote.kakao.dto.KakaoSearchResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,6 @@ class KakaoClientTest {
     @Test
     void test_search() {
         final KakaoSearchResponse response = sut.search("카카오뱅크채용", "accuracy", 1, 10);
-        assertTrue(response.getDocuments().isEmpty());
+        assertFalse(response.getDocuments().isEmpty());
     }
 }
