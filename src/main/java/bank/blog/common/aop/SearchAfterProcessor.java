@@ -1,16 +1,12 @@
 package bank.blog.common.aop;
 
-import bank.blog.infra.keyword.KeywordEntity;
-import bank.blog.infra.keyword.KeywordJpaRepository;
+import bank.blog.service.keyword.RegisterPopularKeywordService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
@@ -19,7 +15,7 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 public class SearchAfterProcessor {
 
     @Autowired
-    private KeywordJpaRepository keywordRepository;
+    private RegisterPopularKeywordService keywordService;
 
     @Pointcut("execution(* bank.blog.controller.v1.GetBlogSearchController.search(..))")
     private void process() {
@@ -32,22 +28,7 @@ public class SearchAfterProcessor {
             return;
         }
 
-        final String query = (String) joinPoint.getArgs()[0];
-        final Optional<KeywordEntity> saved = keywordRepository.findKeywordEntityByKeyword(query);
-        if(!saved.isPresent()) {
-            final LocalDateTime now = LocalDateTime.now();
-            keywordRepository.saveAndFlush(KeywordEntity.builder()
-                                                        .keyword(query)
-                                                        .total(1)
-                                                        .createdAt(now)
-                                                        .updatedAt(now)
-                                                        .build());
-            return;
-        }
-
-        final KeywordEntity keyword = saved.get();
-        keyword.setTotal(keyword.getTotal() + 1);
-        keywordRepository.saveAndFlush(keyword);
+        keywordService.processIfPresentOrNot((String) joinPoint.getArgs()[0]);
     }
 
 }

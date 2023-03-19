@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "search_keyword")
-public class KeywordEntity {
+class KeywordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
