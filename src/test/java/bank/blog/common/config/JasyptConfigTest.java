@@ -15,8 +15,10 @@ class JasyptConfigTest {
 
     @Test
     void test_jasyptConfig() {
+        // given
         final String key = "KakaoAK d4364f4015d7f9f49fc50977d0896596";
 
+        // then
         assertEquals(key, jasypt.decrypt(jasypt.encrypt(key)));
     }
 }
