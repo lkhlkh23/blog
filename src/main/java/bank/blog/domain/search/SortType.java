@@ -18,13 +18,20 @@ public enum SortType {
     private String description;
 
     public static SortType getSortTypeByCode(final String code) {
-        for (final SortType sortType : values()) {
-            if(code.equals(sortType.code)) {
-                return sortType;
-            }
+        if(Direction.ACCURACY.equals(code.toLowerCase())) {
+            return ACCURACY;
+        }
+
+        if(Direction.RECENCY.equals(code.toLowerCase())) {
+            return RECENCY;
         }
 
         return NONE;
+    }
+
+    private static class Direction {
+        static String ACCURACY = "accuracy";
+        static String RECENCY = "recency";
     }
 
 }

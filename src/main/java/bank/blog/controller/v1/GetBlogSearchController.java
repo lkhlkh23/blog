@@ -4,7 +4,6 @@ import bank.blog.controller.v1.dto.BlogSearchBundleV1;
 import bank.blog.controller.v1.dto.ResponseV1;
 import bank.blog.controller.v1.mapper.BlogSearchV1Mapper;
 import bank.blog.domain.search.SortType;
-import bank.blog.exception.InvalidParameterException;
 import bank.blog.service.search.GetSearchService;
 import bank.blog.service.search.SearchCommand;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,16 +35,12 @@ public class GetBlogSearchController {
     })
     @GetMapping(value = "/search")
     public ResponseV1<BlogSearchBundleV1> search(@RequestParam(name = "query") String query,
-                                                 @RequestParam(name = "sort", defaultValue = "01") String sort,
-                                                 @RequestParam(name = "page", defaultValue = "1") int page,
-                                                 @RequestParam(name = "size", defaultValue = "10") int size) {
-        if(page < 1 || page > 50 || size < 1 || size > 50) {
-            throw new InvalidParameterException();
-        }
-
+                                                 @RequestParam(name = "sort", defaultValue = "01") SortType sort,
+                                                 @RequestParam(name = "page", defaultValue = "1") @Min(1) @Max(50) int page,
+                                                 @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(50) int size) {
         final SearchCommand command = SearchCommand.builder()
                                                    .query(query)
-                                                   .sort(SortType.getSortTypeByCode(sort))
+                                                   .sort(sort)
                                                    .page(page)
                                                    .size(size)
                                                    .build();
