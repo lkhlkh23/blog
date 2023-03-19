@@ -1,20 +1,22 @@
 package bank.blog.service.keyword;
 
-import bank.blog.infra.keyword.RegisterPopularKeywordRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class RegisterPopularKeywordServiceImpl implements RegisterPopularKeywordService {
 
-    private final RegisterPopularKeywordRepository keywordRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    @Transactional()
     @Override
     public void processIfPresentOrNot(final String query) {
-        keywordRepository.processIfPresentOrNot(query);
+        try {
+            redisTemplate.opsForZSet().incrementScore("keyword", query, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
