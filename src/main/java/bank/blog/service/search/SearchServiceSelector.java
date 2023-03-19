@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.security.InvalidParameterException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static bank.blog.domain.search.SearchInterfaceType.KAKAO;
 import static bank.blog.domain.search.SearchInterfaceType.NAVER;
@@ -14,25 +16,17 @@ import static bank.blog.domain.search.SearchInterfaceType.NAVER;
 @Component
 public class SearchServiceSelector {
 
-    private final RemoteSearchService kakaoSearchService;
-    private final RemoteSearchService naverSearchService;
+    private final Map<SearchInterfaceType, RemoteSearchService> selectors = new HashMap<>();
 
     @Autowired
     public SearchServiceSelector(@Qualifier("kakaoSearchService") RemoteSearchService kakaoSearch,
                                  @Qualifier("naverSearchService") RemoteSearchService naverSearch) {
-        kakaoSearchService = kakaoSearch;
-        naverSearchService = naverSearch;
+        selectors.put(KAKAO, kakaoSearch);
+        selectors.put(NAVER, naverSearch);
     }
 
-    public RemoteSearchService getServiceByType(final SearchInterfaceType type) throws InvalidParameterException {
-        if(KAKAO == type) {
-            return kakaoSearchService;
-        }
-
-        if(NAVER == type) {
-            return naverSearchService;
-        }
-
-        throw new InvalidParameterException();
+    public Collection<RemoteSearchService> getAllSearchServices() {
+        return selectors.values();
     }
+
 }

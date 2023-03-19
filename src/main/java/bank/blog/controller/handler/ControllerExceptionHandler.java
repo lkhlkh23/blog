@@ -3,6 +3,7 @@ package bank.blog.controller.handler;
 import bank.blog.controller.v1.dto.ResponseV1;
 import bank.blog.exception.InvalidParameterException;
 import bank.blog.exception.KeywordNotFoundException;
+import bank.blog.exception.SearchResultNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,7 +25,7 @@ public class ControllerExceptionHandler {
         return response;
     }
 
-    @ExceptionHandler(value = {KeywordNotFoundException.class})
+    @ExceptionHandler(value = {KeywordNotFoundException.class, SearchResultNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseV1<?> notFoundException(final Exception e, final WebRequest req) {
         final ResponseV1<Void> response = new ResponseV1();
