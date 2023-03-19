@@ -14,6 +14,15 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  redis:
+    host: 127.0.0.1
+    port: 6739
+
+# @Value("${spring.data.redis.port}")
+#    public int port;
+#
+#    @Value("${spring.data.redis.host}")
+#    public String host;
 
 feign:
   kakao:

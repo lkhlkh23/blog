@@ -1,34 +1,22 @@
 package bank.blog.infra.keyword;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
 public class RegisterPopularKeywordRepositoryImpl implements RegisterPopularKeywordRepository {
 
-    private final KeywordJpaRepository keywordRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void processIfPresentOrNot(final String query) {
-        final Optional<KeywordEntity> saved = keywordRepository.findKeywordEntityByKeyword(query);
-        if(!saved.isPresent()) {
-            final LocalDateTime now = LocalDateTime.now();
-            keywordRepository.saveAndFlush(KeywordEntity.builder()
-                                                        .keyword(query)
-                                                        .total(1)
-                                                        .createdAt(now)
-                                                        .updatedAt(now)
-                                                        .build());
-            return;
+        try {
+            redisTemplate.opsForZSet().incrementScore("keyword", query, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        final KeywordEntity keyword = saved.get();
-        keyword.setTotal(keyword.getTotal() + 1);
-        keywordRepository.saveAndFlush(keyword);
     }
 
 }
