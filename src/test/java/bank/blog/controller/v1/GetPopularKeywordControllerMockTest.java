@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @ActiveProfiles("h2")
@@ -43,8 +44,8 @@ class GetPopularKeywordControllerMockTest {
     }
 
     @Test
-    @DisplayName("키워드가 없을 때 404 메세지 리턴")
-    void test_getPopularKeywords_whenNotExistKeywordThenReturn404() {
+    @DisplayName("키워드가 없을 때 204 메세지 리턴")
+    void test_getPopularKeywords_whenNotExistKeywordThenReturn204() {
         when(keywordService.getPopularKeywords(10)).thenThrow(KeywordNotFoundException.class);
 
         final ResponseEntity<ResponseV1> response =
@@ -52,9 +53,9 @@ class GetPopularKeywordControllerMockTest {
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(404, response.getBody().getStatus());
+        assertEquals(204, response.getBody().getStatus());
     }
 
 }

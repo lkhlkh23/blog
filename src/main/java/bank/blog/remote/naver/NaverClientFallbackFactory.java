@@ -11,8 +11,8 @@ public class NaverClientFallbackFactory implements FallbackFactory<NaverClient> 
 
     @Override
     public NaverClient create(Throwable cause) {
-        return (query, name, page, size) -> {
-            log.error("naver 'search' method is failed");
+        return (query, sort, page, size) -> {
+            log.error("naver 'search' method is failed, query : {}, sort : {}, page :{}, size :{}", query, sort, page, size, cause.getCause());
             return new NaverSearchResponse();
         };
     }

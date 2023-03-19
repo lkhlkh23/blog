@@ -26,7 +26,7 @@ public class GetPopularKeywordServiceImpl implements GetPopularKeywordService {
                                                                .limit(limit)
                                                                .collect(Collectors.toList());
         if(keywords.isEmpty()) {
-            throw new KeywordNotFoundException();
+            throw new KeywordNotFoundException("There is no data");
         }
 
         return keywords;

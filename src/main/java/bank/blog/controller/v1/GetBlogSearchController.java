@@ -26,7 +26,7 @@ public class GetBlogSearchController {
 
     private final GetSearchService searchService;
 
-    @Operation(summary = "블로그 검색", description = "블로그 검색 (1순위 : 카카오, 2순위 : 네이버)", tags = {"GetBlogSearchController" })
+    @Operation(summary = "블로그 검색", description = "블로그 검색 (1순위 : 카카오, 2순위 : 네이버)", tags = {"GetBlogSearchController"})
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -35,7 +35,7 @@ public class GetBlogSearchController {
     })
     @GetMapping(value = "/search")
     public ResponseV1<BlogSearchBundleV1> search(@RequestParam(name = "query") String query,
-                                                 @RequestParam(name = "sort", defaultValue = "01") SortType sort,
+                                                 @RequestParam(name = "sort", defaultValue = "accuracy") SortType sort,
                                                  @RequestParam(name = "page", defaultValue = "1") @Min(1) @Max(50) int page,
                                                  @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(50) int size) {
         final SearchCommand command = SearchCommand.builder()

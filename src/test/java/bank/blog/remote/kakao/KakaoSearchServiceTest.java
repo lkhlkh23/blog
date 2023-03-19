@@ -1,6 +1,7 @@
 package bank.blog.remote.kakao;
 
 import bank.blog.domain.search.SearchDocument;
+import bank.blog.domain.search.SortType;
 import bank.blog.remote.common.RemoteSearchService;
 import bank.blog.remote.kakao.dto.KakaoDocument;
 import bank.blog.remote.kakao.dto.KakaoSearchResponse;
@@ -36,7 +37,7 @@ class KakaoSearchServiceTest {
 
         when(kakaoClient.search("카카오뱅크채용", "accuracy", 1, 10)).thenReturn(response);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "accuracy", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertTrue(searchDocuments.isEmpty());
     }
 
@@ -45,7 +46,7 @@ class KakaoSearchServiceTest {
     void test_search_whenDocumentIsNullThenReturnEmpty() {
         when(kakaoClient.search("카카오뱅크채용", "accuracy", 1, 10)).thenReturn(new KakaoSearchResponse());
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "accuracy", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertTrue(searchDocuments.isEmpty());
     }
 
@@ -54,7 +55,7 @@ class KakaoSearchServiceTest {
     void test_search_whenResponseIsNullThenReturnEmpty() {
         when(kakaoClient.search("카카오뱅크채용", "accuracy", 1, 10)).thenReturn(null);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "accuracy", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertTrue(searchDocuments.isEmpty());
     }
 
@@ -70,7 +71,7 @@ class KakaoSearchServiceTest {
 
         when(kakaoClient.search("카카오뱅크채용", "accuracy", 1, 10)).thenReturn(response);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "accuracy", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertEquals(1, searchDocuments.size());
         assertEquals("title", searchDocuments.get(0).getTitle());
         assertEquals("contents", searchDocuments.get(0).getContents());

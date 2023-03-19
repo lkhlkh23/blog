@@ -1,6 +1,7 @@
 package bank.blog.remote.naver;
 
 import bank.blog.domain.search.SearchDocument;
+import bank.blog.domain.search.SortType;
 import bank.blog.remote.common.RemoteSearchService;
 import bank.blog.remote.naver.dto.NaverItem;
 import bank.blog.remote.naver.dto.NaverSearchResponse;
@@ -36,7 +37,7 @@ class NaverSearchServiceTest {
 
         when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(response);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "sim", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertTrue(searchDocuments.isEmpty());
     }
 
@@ -45,7 +46,7 @@ class NaverSearchServiceTest {
     void test_search_whenItemIsNullThenReturnEmpty() {
         when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(new NaverSearchResponse());
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "sim", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertTrue(searchDocuments.isEmpty());
     }
 
@@ -54,7 +55,7 @@ class NaverSearchServiceTest {
     void test_search_whenResponseIsNullThenReturnEmpty() {
         when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(null);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "sim", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertTrue(searchDocuments.isEmpty());
     }
 
@@ -70,7 +71,7 @@ class NaverSearchServiceTest {
 
         when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(response);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", "sim", 1, 10);
+        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
         assertEquals(1, searchDocuments.size());
         assertEquals("title", searchDocuments.get(0).getTitle());
         assertEquals("description", searchDocuments.get(0).getContents());

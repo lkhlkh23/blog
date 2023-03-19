@@ -28,9 +28,9 @@ class GetBlogSearchControllerIntegrationTest {
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(400, response.getBody().getStatus());
+        assertEquals(500, response.getBody().getStatus());
     }
 
     @Test
@@ -41,9 +41,9 @@ class GetBlogSearchControllerIntegrationTest {
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(400, response.getBody().getStatus());
+        assertEquals(500, response.getBody().getStatus());
     }
 
     @Test
@@ -54,9 +54,9 @@ class GetBlogSearchControllerIntegrationTest {
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(400, response.getBody().getStatus());
+        assertEquals(500, response.getBody().getStatus());
     }
 
     @Test
@@ -67,8 +67,8 @@ class GetBlogSearchControllerIntegrationTest {
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(400, response.getBody().getStatus());
+        assertEquals(500, response.getBody().getStatus());
     }
 }

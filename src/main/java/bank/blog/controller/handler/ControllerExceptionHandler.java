@@ -26,10 +26,10 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(value = {KeywordNotFoundException.class, SearchResultNotFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseV1<?> notFoundException(final Exception e, final WebRequest req) {
         final ResponseV1<Void> response = new ResponseV1();
-        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setStatus(HttpStatus.NO_CONTENT.value());
         response.setMessage(e.getMessage());
 
         return response;
@@ -39,7 +39,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseV1<?> unknownException(final Exception e, final WebRequest req) {
         final ResponseV1<Void> response = new ResponseV1();
-        response.setStatus(400);
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setMessage(e.getMessage());
 
         return response;

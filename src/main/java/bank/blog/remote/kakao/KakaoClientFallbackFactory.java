@@ -11,8 +11,8 @@ public class KakaoClientFallbackFactory implements FallbackFactory<KakaoClient> 
 
     @Override
     public KakaoClient create(Throwable cause) {
-        return (query, name, page, size) -> {
-            log.error("Kakao 'search' method is failed");
+        return (query, sort, page, size) -> {
+            log.error("kakao 'search' method is failed, query : {}, sort : {}, page :{}, size :{}", query, sort, page, size, cause.getCause());
             return new KakaoSearchResponse();
         };
     }

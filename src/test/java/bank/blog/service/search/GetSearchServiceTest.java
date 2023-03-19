@@ -42,9 +42,9 @@ class GetSearchServiceTest {
 
     @Test
     void test_search_whenKakaoIsSuccessThenReturnKakaoResults() {
-        when(kakaoSearchService.search(command.getQuery(), command.getSort().getKakoCode(), command.getPage(), command.getSize()))
+        when(kakaoSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
             .thenReturn(List.of(createSearchDocument("kakao")));
-        when(naverSearchService.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize()))
+        when(naverSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
             .thenReturn(List.of(createSearchDocument("naver")));
 
         final List<SearchDocument> results = sut.search(command);
@@ -54,9 +54,9 @@ class GetSearchServiceTest {
 
     @Test
     void test_search_whenKakaoIsFailedThenReturnNaverResults() {
-        when(kakaoSearchService.search(command.getQuery(), command.getSort().getKakoCode(), command.getPage(), command.getSize()))
+        when(kakaoSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
             .thenReturn(Collections.EMPTY_LIST);
-        when(naverSearchService.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize()))
+        when(naverSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
             .thenReturn(List.of(createSearchDocument("naver")));
 
         final List<SearchDocument> results = sut.search(command);

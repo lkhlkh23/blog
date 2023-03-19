@@ -1,6 +1,7 @@
 package bank.blog.remote.naver;
 
 import bank.blog.domain.search.SearchDocument;
+import bank.blog.domain.search.SortType;
 import bank.blog.remote.common.RemoteSearchService;
 import bank.blog.remote.naver.dto.NaverSearchResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class NaverSearchServiceImpl implements RemoteSearchService {
     private final NaverClient naverClient;
 
     @Override
-    public List<SearchDocument> search(final String query, final String sort, final int page, final int size) {
-        final NaverSearchResponse response = naverClient.search(query, sort, page, size);
+    public List<SearchDocument> search(final String query, final SortType sort, final int page, final int size) {
+        final NaverSearchResponse response = naverClient.search(query, sort.getNaverCode(), page, size);
         if(response == null || response.getItems() == null || response.getItems().isEmpty()) {
             return Collections.EMPTY_LIST;
         }

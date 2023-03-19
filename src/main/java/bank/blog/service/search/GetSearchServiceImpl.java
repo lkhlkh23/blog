@@ -18,7 +18,7 @@ public class GetSearchServiceImpl implements GetSearchService {
     public List<SearchDocument> search(final SearchCommand command) {
         for (final RemoteSearchService searchService : selector.getAllSearchServices()) {
             final List<SearchDocument> response = searchService.search(command.getQuery(),
-                                                                       command.getSort().getKakoCode(),
+                                                                       command.getSort(),
                                                                        command.getPage(),
                                                                        command.getSize());
             if(response.isEmpty()) {
@@ -28,7 +28,7 @@ public class GetSearchServiceImpl implements GetSearchService {
             return response;
         }
 
-        throw new SearchResultNotFoundException();
+        throw new SearchResultNotFoundException("No API search results");
     }
 
 }

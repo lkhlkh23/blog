@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static bank.blog.domain.search.SearchInterfaceType.KAKAO;
@@ -16,17 +18,17 @@ import static bank.blog.domain.search.SearchInterfaceType.NAVER;
 @Component
 public class SearchServiceSelector {
 
-    private final Map<SearchInterfaceType, RemoteSearchService> selectors = new HashMap<>();
+    private final List<RemoteSearchService> selectors = new ArrayList<>();
 
     @Autowired
     public SearchServiceSelector(@Qualifier("kakaoSearchService") RemoteSearchService kakaoSearch,
                                  @Qualifier("naverSearchService") RemoteSearchService naverSearch) {
-        selectors.put(KAKAO, kakaoSearch);
-        selectors.put(NAVER, naverSearch);
+        selectors.add(kakaoSearch);
+        selectors.add(naverSearch);
     }
 
-    public Collection<RemoteSearchService> getAllSearchServices() {
-        return selectors.values();
+    public List<RemoteSearchService> getAllSearchServices() {
+        return selectors;
     }
 
 }
