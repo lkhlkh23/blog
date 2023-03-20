@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GetPopularKeywordService {
 
-    List<PopularKeyword> getPopularKeywords();
+    List<PopularKeyword> getPopularKeywords(final int limit);
 
 }

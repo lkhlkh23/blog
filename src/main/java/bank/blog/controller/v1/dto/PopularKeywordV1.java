@@ -8,6 +8,6 @@ import lombok.Setter;
 public class PopularKeywordV1 {
 
     private String keyword;
-    private int total;
+    private long total;
 
 }

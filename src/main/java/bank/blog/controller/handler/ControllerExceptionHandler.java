@@ -16,10 +16,10 @@ import org.springframework.web.context.request.WebRequest;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {InvalidParameterException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseV1<?> invalidParameterException(final Exception e, final WebRequest req) {
         final ResponseV1<Void> response = new ResponseV1();
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setMessage(e.getMessage());
 
         return response;

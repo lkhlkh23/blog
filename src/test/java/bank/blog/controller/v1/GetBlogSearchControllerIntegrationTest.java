@@ -10,10 +10,12 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ActiveProfiles("h2")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class GetBlogSearchControllerIntegrationTest {
 
@@ -24,7 +26,7 @@ class GetBlogSearchControllerIntegrationTest {
     @DisplayName("page가 1보다 작을 때, BadRequest 발생")
     void test_search_whenPageIsLessThenOneThenReturnBadRequest() {
         final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", -1, 10)
+            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 0, 10)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
@@ -37,7 +39,7 @@ class GetBlogSearchControllerIntegrationTest {
     @DisplayName("size 1보다 작을 때, BadRequest 발생")
     void test_search_whenSizeIsLessThenOneThenReturnBadRequest() {
         final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 10, -1)
+            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 10, 0)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
@@ -50,7 +52,7 @@ class GetBlogSearchControllerIntegrationTest {
     @DisplayName("page가 50보다 클 때, BadRequest 발생")
     void test_search_whenPageIsGreaterThen50ThenReturnBadRequest() {
         final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 100, 10)
+            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 51, 10)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
@@ -63,7 +65,7 @@ class GetBlogSearchControllerIntegrationTest {
     @DisplayName("size 50보다 클 때, BadRequest 발생")
     void test_search_whenSizeIsGreaterThen50ThenReturnBadRequest() {
         final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 10, 100)
+            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "01", 10, 51)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 

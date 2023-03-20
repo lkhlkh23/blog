@@ -32,7 +32,7 @@ class GetPopularKeywordServiceTest {
     @Test
     @DisplayName("키워드 조회 결과가 없을 때, 빈 리스트 리턴")
     void test_getPopularKeywords_whenNotExistKeywordThenReturnEmpty() {
-        assertTrue(sut.getPopularKeywords().isEmpty());
+        assertTrue(sut.getPopularKeywords(10).isEmpty());
     }
 
     @Test
@@ -44,7 +44,7 @@ class GetPopularKeywordServiceTest {
         }
 
         // then
-        final List<PopularKeyword> result = sut.getPopularKeywords();
+        final List<PopularKeyword> result = sut.getPopularKeywords(10);
         assertEquals(10, result.size());
         assertEquals("kakao-20", result.get(0).getKeyword());
         assertEquals("kakao-11", result.get(9).getKeyword());
@@ -59,7 +59,7 @@ class GetPopularKeywordServiceTest {
         }
 
         // then
-        final List<PopularKeyword> result = sut.getPopularKeywords();
+        final List<PopularKeyword> result = sut.getPopularKeywords(10);
         assertEquals(5, result.size());
         assertEquals("kakao-5", result.get(0).getKeyword());
         assertEquals("kakao-1", result.get(4).getKeyword());
