@@ -5,6 +5,8 @@ import bank.blog.domain.search.SortType;
 import bank.blog.remote.common.RemoteSearchService;
 import bank.blog.remote.naver.dto.NaverItem;
 import bank.blog.remote.naver.dto.NaverSearchResponse;
+import bank.blog.service.search.SearchCommand;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,39 +31,60 @@ class NaverSearchServiceTest {
     @MockBean
     private NaverClient naverClient;
 
+    private SearchCommand command;
+
+    @BeforeEach
+    void setUp() {
+        this.command = SearchCommand.builder()
+                                    .query("카카오")
+                                    .sort(SortType.ACCURACY)
+                                    .size(10)
+                                    .page(1)
+                                    .build();
+    }
+
     @Test
     @DisplayName("아이템이 비었을 때, 빈 리스트 반환")
     void test_search_whenItemIsEmptyThenReturnEmpty() {
+        // given
         final NaverSearchResponse response = new NaverSearchResponse();
         response.setItems(Collections.EMPTY_LIST);
 
-        when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(response);
+        // when
+        when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize())).thenReturn(response);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
+        // then
+        final List<SearchDocument> searchDocuments = sut.search(command);
         assertTrue(searchDocuments.isEmpty());
     }
 
     @Test
     @DisplayName("아이템이 null 일 때, 빈 리스트 반환")
     void test_search_whenItemIsNullThenReturnEmpty() {
-        when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(new NaverSearchResponse());
+        // when
+        when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize()))
+            .thenReturn(new NaverSearchResponse());
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
+        // then
+        final List<SearchDocument> searchDocuments = sut.search(command);
         assertTrue(searchDocuments.isEmpty());
     }
 
     @Test
     @DisplayName("응답이 null 일 때, 빈 리스트 반환")
     void test_search_whenResponseIsNullThenReturnEmpty() {
-        when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(null);
+        // when
+        when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize())).thenReturn(null);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
+        // then
+        final List<SearchDocument> searchDocuments = sut.search(command);
         assertTrue(searchDocuments.isEmpty());
     }
 
     @Test
     @DisplayName("응답과 아이템이 값이 있을 때, 객체가 있는 리턴 반환")
     void test_search_whenResponseAndItemIsNotEmptyThenReturnList() {
+        // given
         final NaverSearchResponse response = new NaverSearchResponse();
         final NaverItem item = new NaverItem();
         item.setTitle("title");
@@ -69,9 +92,11 @@ class NaverSearchServiceTest {
         item.setLink("link");
         response.setItems(List.of(item));
 
-        when(naverClient.search("카카오뱅크채용", "sim", 1, 10)).thenReturn(response);
+        // when
+        when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize())).thenReturn(response);
 
-        final List<SearchDocument> searchDocuments = sut.search("카카오뱅크채용", SortType.ACCURACY, 1, 10);
+        // then
+        final List<SearchDocument> searchDocuments = sut.search(command);
         assertEquals(1, searchDocuments.size());
         assertEquals("title", searchDocuments.get(0).getTitle());
         assertEquals("description", searchDocuments.get(0).getContents());

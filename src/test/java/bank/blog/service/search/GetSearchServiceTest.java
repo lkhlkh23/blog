@@ -42,11 +42,11 @@ class GetSearchServiceTest {
 
     @Test
     void test_search_whenKakaoIsSuccessThenReturnKakaoResults() {
-        when(kakaoSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
-            .thenReturn(List.of(createSearchDocument("kakao")));
-        when(naverSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
-            .thenReturn(List.of(createSearchDocument("naver")));
+        // when
+        when(kakaoSearchService.search(command)).thenReturn(List.of(createSearchDocument("kakao")));
+        when(naverSearchService.search(command)).thenReturn(List.of(createSearchDocument("naver")));
 
+        // then
         final List<SearchDocument> results = sut.search(command);
         assertEquals(1, results.size());
         assertEquals("kakao", results.get(0).getTitle());
@@ -54,11 +54,11 @@ class GetSearchServiceTest {
 
     @Test
     void test_search_whenKakaoIsFailedThenReturnNaverResults() {
-        when(kakaoSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
-            .thenReturn(Collections.EMPTY_LIST);
-        when(naverSearchService.search(command.getQuery(), command.getSort(), command.getPage(), command.getSize()))
-            .thenReturn(List.of(createSearchDocument("naver")));
+        // when
+        when(kakaoSearchService.search(command)).thenReturn(Collections.EMPTY_LIST);
+        when(naverSearchService.search(command)).thenReturn(List.of(createSearchDocument("naver")));
 
+        // then
         final List<SearchDocument> results = sut.search(command);
         assertEquals(1, results.size());
         assertEquals("naver", results.get(0).getTitle());

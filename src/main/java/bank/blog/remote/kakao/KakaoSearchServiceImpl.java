@@ -1,9 +1,9 @@
 package bank.blog.remote.kakao;
 
 import bank.blog.domain.search.SearchDocument;
-import bank.blog.domain.search.SortType;
 import bank.blog.remote.common.RemoteSearchService;
 import bank.blog.remote.kakao.dto.KakaoSearchResponse;
+import bank.blog.service.search.SearchCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +18,11 @@ public class KakaoSearchServiceImpl implements RemoteSearchService {
     private final KakaoClient kakaoClient;
 
     @Override
-    public List<SearchDocument> search(final String query, final SortType sort, final int page, final int size) {
-        final KakaoSearchResponse response = kakaoClient.search(query, sort.getKakoCode(), page, size);
+    public List<SearchDocument> search(final SearchCommand command) {
+        final KakaoSearchResponse response = kakaoClient.search(command.getQuery(),
+                                                                command.getSort().getKakoCode(),
+                                                                command.getPage(),
+                                                                command.getSize());
         if(response == null || response.getDocuments() == null || response.getDocuments().isEmpty()) {
             return Collections.EMPTY_LIST;
         }

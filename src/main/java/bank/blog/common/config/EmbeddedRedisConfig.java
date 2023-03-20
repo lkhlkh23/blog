@@ -8,7 +8,6 @@ import redis.embedded.RedisServer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.io.IOException;
 
 @Slf4j
 @Profile({"local", "h2"})
@@ -21,9 +20,16 @@ public class EmbeddedRedisConfig {
     private RedisServer redisServer;
 
     @PostConstruct
-    public void start() throws IOException {
-        this.redisServer = new RedisServer(redisPort);
-        this.redisServer.start();
+    public void start() {
+        this.redisServer = RedisServer.builder()
+                                      .port(redisPort)
+                                      .setting("maxmemory 128M")
+                                      .build();
+        try {
+            this.redisServer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @PreDestroy

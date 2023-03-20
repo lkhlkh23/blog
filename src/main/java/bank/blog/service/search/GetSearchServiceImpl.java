@@ -17,10 +17,7 @@ public class GetSearchServiceImpl implements GetSearchService {
     @Override
     public List<SearchDocument> search(final SearchCommand command) {
         for (final RemoteSearchService searchService : selector.getAllSearchServices()) {
-            final List<SearchDocument> response = searchService.search(command.getQuery(),
-                                                                       command.getSort(),
-                                                                       command.getPage(),
-                                                                       command.getSize());
+            final List<SearchDocument> response = searchService.search(command);
             if(response.isEmpty()) {
                 continue;
             }
