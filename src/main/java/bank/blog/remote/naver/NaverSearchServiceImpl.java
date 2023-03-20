@@ -5,12 +5,14 @@ import bank.blog.remote.common.RemoteSearchService;
 import bank.blog.remote.naver.dto.NaverSearchResponse;
 import bank.blog.service.search.SearchCommand;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Order(2)
 @Service(value = "naverSearchService")
 @RequiredArgsConstructor
 public class NaverSearchServiceImpl implements RemoteSearchService {
