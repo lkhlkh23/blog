@@ -1,0 +1,20 @@
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6739
+
+jasypt:
+  encryptor:
+    password: doblee
+    bean: standardPBEStringEncryptor
+
+feign:
+  kakao:
+    url: https://dapi.kakao.com
+    key:
+      rest: ENC(IloiX1Sc/pg74umUTYye1pt4SDJ0zHn60RhY1TXRmA5mNNl9M7Qyor7x4CQ6IrkJ7xRNPUPjfdQ=)
+  naver:
+    url: https://openapi.naver.com
+    key:
+      id: ENC(3nkJ8KmjNG4DDVIyB5GvCLhyIzFmsb+WlzzsVL6WjBw=)
+      secret: ENC(i7KHjyX1R+cMigLWfkeIVBrbipqWSk56)
