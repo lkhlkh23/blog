@@ -1,11 +1,11 @@
 package bank.blog.service.search;
 
 import bank.blog.domain.search.SearchDocument;
-import bank.blog.exception.SearchResultNotFoundException;
 import bank.blog.remote.common.RemoteSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class GetSearchServiceImpl implements GetSearchService {
             return response;
         }
 
-        throw new SearchResultNotFoundException("No API search results");
+        return Collections.EMPTY_LIST;
     }
 
 }
