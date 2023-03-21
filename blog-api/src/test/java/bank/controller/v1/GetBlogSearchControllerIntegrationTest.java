@@ -10,6 +10,8 @@ import bank.service.search.SearchCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,11 +59,12 @@ class GetBlogSearchControllerIntegrationTest {
                                     .build();
     }
 
-    @Test
-    @DisplayName("page가 1보다 작을 때, internal server error 발생")
-    void test_search_whenPageIsLessThenOneThenReturn500() {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 51})
+    @DisplayName("page가 1보다 직거나 50보다 클 때, internal server error 발생")
+    void test_search_whenPageIsLessThen1OrGreaterThen50ThenReturn500(final int param) {
         final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "accuracy", 0, 10)
+            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "accuracy", param, 10)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
@@ -70,37 +73,12 @@ class GetBlogSearchControllerIntegrationTest {
         assertEquals(500, response.getBody().getStatus());
     }
 
-    @Test
-    @DisplayName("size 1보다 작을 때, internal server error 발생")
-    void test_search_whenSizeIsLessThenOneThenReturn500() {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 51})
+    @DisplayName("size 1보다 작거나 50보다 클 때, internal server error 발생")
+    void test_search_whenSizeIsLessThen1OrGreaterThen50ThenReturn500(final int param) {
         final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "accuracy", 10, 0)
-                , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
-                });
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(500, response.getBody().getStatus());
-    }
-
-    @Test
-    @DisplayName("page가 50보다 클 때, internal server error 발생")
-    void test_search_whenPageIsGreaterThen50ThenReturn500() {
-        final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "accuracy", 51, 10)
-                , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
-                });
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(500, response.getBody().getStatus());
-    }
-
-    @Test
-    @DisplayName("size 50보다 클 때, internal server error 발생")
-    void test_search_whenSizeIsGreaterThen50ThenReturn500() {
-        final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "accuracy", 10, 51)
+            this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "accuracy", 10, param)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 

@@ -6,6 +6,8 @@ import bank.controller.v1.dto.ResponseV1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,24 +42,12 @@ class GetPopularKeywordControllerIntegrationTest {
         redisTemplate.delete(key);
     }
 
-    @Test
-    @DisplayName("10개 초과 갯수만큼 조회 시, 에러발생")
-    void test_getPopularKeywords_whenParameterIsOverThan10ThenReturn500Error() {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 11})
+    @DisplayName("1보다 작거나 10보다 크면, 에러발생")
+    void test_getPopularKeywords_whenParameterIsLessThen1OrOverThan10ThenReturn500Error() {
         final ResponseEntity<ResponseV1> response =
             this.restTemplate.exchange(String.format("/kakao/v1/keywords?limit=%d", 11)
-                , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
-                });
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(500, response.getBody().getStatus());
-    }
-
-    @Test
-    @DisplayName("1개 미만 갯수만큼 조회 시, 에러발생")
-    void test_getPopularKeywords_whenParameterIsLessThan1ThenReturn500Error() {
-        final ResponseEntity<ResponseV1> response =
-            this.restTemplate.exchange(String.format("/kakao/v1/keywords?limit=%d", 0)
                 , HttpMethod.GET, null, new ParameterizedTypeReference<ResponseV1>() {
                 });
 
