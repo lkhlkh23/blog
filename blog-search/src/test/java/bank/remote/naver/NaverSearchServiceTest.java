@@ -1,7 +1,7 @@
 package bank.remote.naver;
 
-import bank.common.type.SortType;
 import bank.domain.search.SearchDocument;
+import bank.domain.search.SortType;
 import bank.remote.naver.dto.NaverItem;
 import bank.remote.naver.dto.NaverSearchResponse;
 import bank.service.search.SearchCommand;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {NaverSearchServiceImpl.class})
 class NaverSearchServiceTest {
 
     @Autowired

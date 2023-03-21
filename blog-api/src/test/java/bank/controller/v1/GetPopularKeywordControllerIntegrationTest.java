@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,6 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class GetPopularKeywordControllerIntegrationTest {
 
+    @Value("${spring.redis.key.keyword}")
+    private String key;
+
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -35,7 +39,7 @@ class GetPopularKeywordControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        redisTemplate.delete("keyword");
+        redisTemplate.delete(key);
     }
 
     @Test
@@ -84,7 +88,7 @@ class GetPopularKeywordControllerIntegrationTest {
     void test_getPopularKeywords_whenSearch10KeywordThenReturnData() {
         // when
         for (int i = 1; i <= 20; i++) {
-            redisTemplate.opsForZSet().add("keyword", "kakao-" + i, i);
+            redisTemplate.opsForZSet().add(key, "kakao-" + i, i);
         }
 
         // then
@@ -106,8 +110,8 @@ class GetPopularKeywordControllerIntegrationTest {
     @DisplayName("키워드가 2개 존재할 때, 키워드 3개 조회, 성공적으로 데이터 반환")
     void test_getPopularKeywords_whenExistOnly2KeywordThenReturnData() {
         // when
-        redisTemplate.opsForZSet().add("keyword", "naver", 2);
-        redisTemplate.opsForZSet().add("keyword", "kakao", 10);
+        redisTemplate.opsForZSet().add(key, "naver", 2);
+        redisTemplate.opsForZSet().add(key, "kakao", 10);
 
         // then
         final ResponseEntity<ResponseV1<PopularKeywordBundleV1>> response =

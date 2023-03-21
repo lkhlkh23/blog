@@ -1,7 +1,7 @@
 package bank.service.search;
 
-import bank.common.type.SortType;
 import bank.domain.search.SearchDocument;
+import bank.domain.search.SortType;
 import bank.remote.kakao.KakaoSearchServiceImpl;
 import bank.remote.naver.NaverSearchServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {GetSearchServiceImpl.class, SearchServiceSelector.class})
 class GetSearchServiceTest {
 
     @Autowired

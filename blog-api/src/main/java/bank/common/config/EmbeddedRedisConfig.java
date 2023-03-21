@@ -10,12 +10,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Slf4j
-@Profile({"local", "h2"})
+@Profile({"h2"})
 @Configuration
 public class EmbeddedRedisConfig {
 
     @Value("${spring.redis.port}")
     private int redisPort;
+
+    @Value("${spring.redis.setting}")
+    private String setting;
 
     private RedisServer redisServer;
 
@@ -23,7 +26,7 @@ public class EmbeddedRedisConfig {
     public void start() {
         this.redisServer = RedisServer.builder()
                                       .port(redisPort)
-                                      .setting("maxmemory 128M")
+                                      .setting(setting)
                                       .build();
         try {
             this.redisServer.start();

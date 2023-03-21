@@ -1,15 +1,16 @@
 package bank.controller.v1;
 
-import bank.common.type.SortType;
 import bank.controller.v1.dto.BlogSearchBundleV1;
 import bank.controller.v1.dto.ResponseV1;
 import bank.domain.search.SearchDocument;
+import bank.domain.search.SortType;
 import bank.service.search.GetSearchService;
 import bank.service.search.SearchCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -32,6 +33,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class GetBlogSearchControllerIntegrationTest {
 
+    @Value("${spring.redis.key.keyword}")
+    private String key;
+
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -43,7 +47,7 @@ class GetBlogSearchControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        redisTemplate.delete("keyword");
+        redisTemplate.delete(key);
     }
 
     @Test
@@ -124,7 +128,7 @@ class GetBlogSearchControllerIntegrationTest {
 
         // when
         when(searchService.search(command)).thenReturn(Collections.EMPTY_LIST);
-        redisTemplate.opsForZSet().add("keyword", "kakao", 100);
+        redisTemplate.opsForZSet().add(key, "kakao", 100);
 
         // then
         final ResponseEntity<ResponseV1<BlogSearchBundleV1>> response =
@@ -135,7 +139,7 @@ class GetBlogSearchControllerIntegrationTest {
         assertEquals(HttpStatus.OK.value(), response.getBody().getStatus());
         assertNotNull(response.getBody().getData());
         assertNull(response.getBody().getData().getSearches());
-        assertEquals(101.0, redisTemplate.opsForZSet().score("keyword", "kakao"));
+        assertEquals(101.0, redisTemplate.opsForZSet().score(key, "kakao"));
     }
 
     @Test
@@ -161,7 +165,7 @@ class GetBlogSearchControllerIntegrationTest {
         assertEquals(HttpStatus.OK.value(), response.getBody().getStatus());
         assertNotNull(response.getBody().getData());
         assertNull(response.getBody().getData().getSearches());
-        assertEquals(1.0, redisTemplate.opsForZSet().score("keyword", "kakao"));
+        assertEquals(1.0, redisTemplate.opsForZSet().score(key, "kakao"));
     }
 
     @Test
@@ -177,7 +181,7 @@ class GetBlogSearchControllerIntegrationTest {
 
         // when
         when(searchService.search(command)).thenReturn(List.of(createSearchDocument("무지")));
-        redisTemplate.opsForZSet().add("keyword", "kakao", 100);
+        redisTemplate.opsForZSet().add(key, "kakao", 100);
 
         // then
         final ResponseEntity<ResponseV1<BlogSearchBundleV1>> response =
@@ -189,7 +193,7 @@ class GetBlogSearchControllerIntegrationTest {
         assertNotNull(response.getBody().getData());
         assertEquals(1, response.getBody().getData().getSearches().size());
         assertEquals("무지", response.getBody().getData().getSearches().get(0).getTitle());
-        assertEquals(101.0, redisTemplate.opsForZSet().score("keyword", "kakao"));
+        assertEquals(101.0, redisTemplate.opsForZSet().score(key, "kakao"));
     }
 
     @Test
@@ -216,7 +220,7 @@ class GetBlogSearchControllerIntegrationTest {
         assertNotNull(response.getBody().getData());
         assertEquals(1, response.getBody().getData().getSearches().size());
         assertEquals("무지", response.getBody().getData().getSearches().get(0).getTitle());
-        assertEquals(1.0, redisTemplate.opsForZSet().score("keyword", "kakao"));
+        assertEquals(1.0, redisTemplate.opsForZSet().score(key, "kakao"));
     }
 
     private SearchDocument createSearchDocument(final String title) {

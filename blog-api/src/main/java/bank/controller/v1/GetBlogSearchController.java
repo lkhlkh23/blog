@@ -1,9 +1,9 @@
 package bank.controller.v1;
 
-import bank.common.type.SortType;
 import bank.controller.v1.dto.BlogSearchBundleV1;
 import bank.controller.v1.dto.ResponseV1;
 import bank.controller.v1.mapper.BlogSearchV1Mapper;
+import bank.domain.search.SortType;
 import bank.exception.InvalidParameterException;
 import bank.service.search.GetSearchService;
 import bank.service.search.SearchCommand;

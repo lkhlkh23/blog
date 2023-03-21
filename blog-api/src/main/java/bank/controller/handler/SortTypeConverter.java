@@ -1,6 +1,6 @@
 package bank.controller.handler;
 
-import bank.common.type.SortType;
+import bank.domain.search.SortType;
 import org.springframework.core.convert.converter.Converter;
 
 public class SortTypeConverter implements Converter<String, SortType> {
