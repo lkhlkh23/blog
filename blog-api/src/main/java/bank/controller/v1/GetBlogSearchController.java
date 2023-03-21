@@ -3,6 +3,8 @@ package bank.controller.v1;
 import bank.controller.v1.dto.BlogSearchBundleV1;
 import bank.controller.v1.dto.ResponseV1;
 import bank.controller.v1.mapper.BlogSearchV1Mapper;
+import bank.controller.v1.mapper.SearchPageV1Mapper;
+import bank.domain.search.SearchResponse;
 import bank.domain.search.SortType;
 import bank.exception.InvalidParameterException;
 import bank.service.search.GetSearchService;
@@ -50,11 +52,14 @@ public class GetBlogSearchController {
                                                    .page(page)
                                                    .size(size)
                                                    .build();
+
         final BlogSearchBundleV1 blogSearches = new BlogSearchBundleV1();
-        searchService.search(command)
-                     .stream()
-                     .map(BlogSearchV1Mapper.INSTANCE::from)
-                     .forEach(blogSearches::addSearch);
+        final SearchResponse response = searchService.search(command);
+        blogSearches.setPage(SearchPageV1Mapper.INSTANCE.from(response.getPage()));
+        response.getDocuments()
+                .stream()
+                .map(BlogSearchV1Mapper.INSTANCE::from)
+                .forEach(blogSearches::addSearch);
 
         return new ResponseV1<>(blogSearches, HttpStatus.OK.value(), "");
     }

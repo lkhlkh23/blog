@@ -1,6 +1,7 @@
 package bank.service.search;
 
 import bank.domain.search.SearchDocument;
+import bank.domain.search.SearchResponse;
 import bank.domain.search.SortType;
 import bank.remote.kakao.KakaoSearchServiceImpl;
 import bank.remote.naver.NaverSearchServiceImpl;
@@ -45,38 +46,53 @@ class GetSearchServiceTest {
     @Test
     @DisplayName("카카오 검색결과가 있을 때, 카카오 결과 반환")
     void test_search_whenKakaoIsSuccessThenReturnKakaoResults() {
+        // given
+        final SearchResponse kakaoResponse = new SearchResponse(null, List.of(createSearchDocument("kakao")));
+        final SearchResponse naverResponse = new SearchResponse(null, List.of(createSearchDocument("naver")));
+
         // when
-        when(kakaoSearchService.search(command)).thenReturn(List.of(createSearchDocument("kakao")));
-        when(naverSearchService.search(command)).thenReturn(List.of(createSearchDocument("naver")));
+        when(kakaoSearchService.search(command)).thenReturn(kakaoResponse);
+        when(naverSearchService.search(command)).thenReturn(naverResponse);
 
         // then
-        final List<SearchDocument> results = sut.search(command);
-        assertEquals(1, results.size());
-        assertEquals("kakao", results.get(0).getTitle());
+        final SearchResponse results = sut.search(command);
+        assertEquals(1, results.getDocuments().size());
+        assertEquals("kakao", results.getDocuments().get(0).getTitle());
     }
 
     @Test
     @DisplayName("카카오 검색결과가 없을 때, 네이버 결과 반환")
     void test_search_whenKakaoIsFailedThenReturnNaverResults() {
+        // given
+        final SearchResponse kakaoResponse = new SearchResponse(null, Collections.EMPTY_LIST);
+        final SearchResponse naverResponse = new SearchResponse(null, List.of(createSearchDocument("naver")));
+
         // when
-        when(kakaoSearchService.search(command)).thenReturn(Collections.EMPTY_LIST);
-        when(naverSearchService.search(command)).thenReturn(List.of(createSearchDocument("naver")));
+        when(kakaoSearchService.search(command)).thenReturn(kakaoResponse);
+        when(naverSearchService.search(command)).thenReturn(naverResponse);
 
         // then
-        final List<SearchDocument> results = sut.search(command);
-        assertEquals(1, results.size());
-        assertEquals("naver", results.get(0).getTitle());
+        final SearchResponse results = sut.search(command);
+        assertEquals(1, results.getDocuments().size());
+        assertEquals("naver", results.getDocuments().get(0).getTitle());
     }
 
     @Test
     @DisplayName("카카오와 네이버 검색결과가 모두 없을 때, 빈 리스트 반환")
     void test_search_whenAllFailedThenReturnEmptyListResults() {
+        // given
+        final SearchResponse kakaoResponse = new SearchResponse(null, Collections.EMPTY_LIST);
+        final SearchResponse naverResponse = new SearchResponse(null, Collections.EMPTY_LIST);
+
         // when
-        when(kakaoSearchService.search(command)).thenReturn(Collections.EMPTY_LIST);
-        when(naverSearchService.search(command)).thenReturn(Collections.EMPTY_LIST);
+        when(kakaoSearchService.search(command)).thenReturn(kakaoResponse);
+        when(naverSearchService.search(command)).thenReturn(naverResponse);
 
         // then
-        assertTrue(sut.search(command).isEmpty());
+        final SearchResponse results = sut.search(command);
+        assertTrue(results.getDocuments().isEmpty());
+        assertEquals(1, results.getPage().getRequestPage());
+        assertEquals(10, results.getPage().getRequestSize());
     }
 
     private SearchDocument createSearchDocument(final String title) {

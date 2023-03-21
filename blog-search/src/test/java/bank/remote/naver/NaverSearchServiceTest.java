@@ -1,6 +1,6 @@
 package bank.remote.naver;
 
-import bank.domain.search.SearchDocument;
+import bank.domain.search.SearchResponse;
 import bank.domain.search.SortType;
 import bank.remote.naver.dto.NaverItem;
 import bank.remote.naver.dto.NaverSearchResponse;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {NaverSearchServiceImpl.class})
@@ -51,8 +51,8 @@ class NaverSearchServiceTest {
         when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize())).thenReturn(response);
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertTrue(searchDocuments.isEmpty());
+        final SearchResponse result = sut.search(command);
+        assertNull(result.getDocuments());
     }
 
     @Test
@@ -63,8 +63,8 @@ class NaverSearchServiceTest {
             .thenReturn(new NaverSearchResponse());
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertTrue(searchDocuments.isEmpty());
+        final SearchResponse result = sut.search(command);
+        assertNull(result.getDocuments());
     }
 
     @Test
@@ -74,8 +74,8 @@ class NaverSearchServiceTest {
         when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize())).thenReturn(null);
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertTrue(searchDocuments.isEmpty());
+        final SearchResponse result = sut.search(command);
+        assertNull(result.getDocuments());
     }
 
     @Test
@@ -93,11 +93,13 @@ class NaverSearchServiceTest {
         when(naverClient.search(command.getQuery(), command.getSort().getNaverCode(), command.getPage(), command.getSize())).thenReturn(response);
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertEquals(1, searchDocuments.size());
-        assertEquals("title", searchDocuments.get(0).getTitle());
-        assertEquals("description", searchDocuments.get(0).getContents());
-        assertEquals("link", searchDocuments.get(0).getUrl());
+        final SearchResponse result = sut.search(command);
+        assertEquals(1, result.getPage().getRequestPage());
+        assertEquals(10, result.getPage().getRequestSize());
+        assertEquals(1, result.getDocuments().size());
+        assertEquals("title", result.getDocuments().get(0).getTitle());
+        assertEquals("description", result.getDocuments().get(0).getContents());
+        assertEquals("link", result.getDocuments().get(0).getUrl());
     }
 
 }

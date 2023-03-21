@@ -1,11 +1,9 @@
 package bank.service.search;
 
-import bank.domain.search.SearchDocument;
-
-import java.util.List;
+import bank.domain.search.SearchResponse;
 
 public interface GetSearchService {
 
-    List<SearchDocument> search(final SearchCommand command);
+    SearchResponse search(final SearchCommand command);
 
 }

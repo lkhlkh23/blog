@@ -1,12 +1,10 @@
 package bank.service.search;
 
-import bank.domain.search.SearchDocument;
+import bank.domain.search.SearchResponse;
+import bank.domain.search.SearchResponseCreator;
 import bank.remote.common.RemoteSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -15,17 +13,18 @@ public class GetSearchServiceImpl implements GetSearchService {
     private final SearchServiceSelector selector;
 
     @Override
-    public List<SearchDocument> search(final SearchCommand command) {
+    public SearchResponse search(final SearchCommand command) {
         for (final RemoteSearchService searchService : selector.getAllSearchServices()) {
-            final List<SearchDocument> response = searchService.search(command);
-            if(response.isEmpty()) {
+            final SearchResponse response = searchService.search(command);
+            if(response.getDocuments() == null || response.getDocuments().isEmpty()) {
                 continue;
             }
 
             return response;
         }
 
-        return Collections.EMPTY_LIST;
+        return SearchResponseCreator.getInstance()
+                                    .createDefault(command);
     }
 
 }

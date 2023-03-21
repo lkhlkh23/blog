@@ -11,6 +11,7 @@ import java.util.List;
 public class BlogSearchBundleV1 {
 
     private List<BlogSearchV1> searches;
+    private SearchPageV1 page;
 
     public void addSearch(final BlogSearchV1 search) {
         if(this.searches == null) {

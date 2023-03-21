@@ -1,8 +1,9 @@
 package bank.remote.kakao;
 
-import bank.domain.search.SearchDocument;
+import bank.domain.search.SearchResponse;
 import bank.domain.search.SortType;
 import bank.remote.kakao.dto.KakaoDocument;
+import bank.remote.kakao.dto.KakaoMeta;
 import bank.remote.kakao.dto.KakaoSearchResponse;
 import bank.service.search.SearchCommand;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = KakaoSearchServiceImpl.class)
@@ -51,8 +52,8 @@ class KakaoSearchServiceTest {
         when(kakaoClient.search(command.getQuery(), command.getSort().getKakoCode(), command.getPage(), command.getSize())).thenReturn(response);
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertTrue(searchDocuments.isEmpty());
+        final SearchResponse result = sut.search(command);
+        assertNull(result.getDocuments());
     }
 
     @Test
@@ -63,8 +64,8 @@ class KakaoSearchServiceTest {
             .thenReturn(new KakaoSearchResponse());
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertTrue(searchDocuments.isEmpty());
+        final SearchResponse result = sut.search(command);
+        assertNull(result.getDocuments());
     }
 
     @Test
@@ -74,8 +75,8 @@ class KakaoSearchServiceTest {
         when(kakaoClient.search(command.getQuery(), command.getSort().getKakoCode(), command.getPage(), command.getSize())).thenReturn(null);
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertTrue(searchDocuments.isEmpty());
+        final SearchResponse result = sut.search(command);
+        assertNull(result.getDocuments());
     }
 
     @Test
@@ -83,21 +84,26 @@ class KakaoSearchServiceTest {
     void test_search_whenResponseAndDocumentIsNotEmptyThenReturnList() {
         // given
         final KakaoSearchResponse response = new KakaoSearchResponse();
+        final KakaoMeta meta = new KakaoMeta();
+        meta.setTotalCount(100);
+        meta.setIsEnd(false);
         final KakaoDocument document = new KakaoDocument();
         document.setTitle("title");
         document.setContents("contents");
         document.setUrl("url");
         response.setDocuments(List.of(document));
+        response.setMeta(meta);
 
         // when
         when(kakaoClient.search(command.getQuery(), command.getSort().getKakoCode(), command.getPage(), command.getSize())).thenReturn(response);
 
         // then
-        final List<SearchDocument> searchDocuments = sut.search(command);
-        assertEquals(1, searchDocuments.size());
-        assertEquals("title", searchDocuments.get(0).getTitle());
-        assertEquals("contents", searchDocuments.get(0).getContents());
-        assertEquals("url", searchDocuments.get(0).getUrl());
+        final SearchResponse result = sut.search(command);
+        assertEquals(1, result.getPage().getRequestPage());
+        assertEquals(10, result.getPage().getRequestSize());
+        assertEquals("title", result.getDocuments().get(0).getTitle());
+        assertEquals("contents", result.getDocuments().get(0).getContents());
+        assertEquals("url", result.getDocuments().get(0).getUrl());
     }
 
 }

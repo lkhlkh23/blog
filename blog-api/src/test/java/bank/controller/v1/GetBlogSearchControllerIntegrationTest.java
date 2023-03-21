@@ -3,6 +3,7 @@ package bank.controller.v1;
 import bank.controller.v1.dto.BlogSearchBundleV1;
 import bank.controller.v1.dto.ResponseV1;
 import bank.domain.search.SearchDocument;
+import bank.domain.search.SearchResponse;
 import bank.domain.search.SortType;
 import bank.service.search.GetSearchService;
 import bank.service.search.SearchCommand;
@@ -45,9 +46,17 @@ class GetBlogSearchControllerIntegrationTest {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    private SearchCommand command;
+
     @BeforeEach
     void setUp() {
         redisTemplate.delete(key);
+        this.command = SearchCommand.builder()
+                                    .query("kakao")
+                                    .page(1)
+                                    .size(10)
+                                    .sort(SortType.ACCURACY)
+                                    .build();
     }
 
     @Test
@@ -103,7 +112,7 @@ class GetBlogSearchControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("정렺조건에 오타가 있을 때, internal server error 발생")
+    @DisplayName("정렬조건에 오타가 있을 때, internal server error 발생")
     void test_search_whenSortIsMissSpellThenReturn500() {
         final ResponseEntity<ResponseV1> response =
             this.restTemplate.exchange(String.format("/kakao/v1/search?query=%s&sort=%s&page=%d&size=%d", "kakao", "miss", 0, 10)
@@ -118,16 +127,8 @@ class GetBlogSearchControllerIntegrationTest {
     @Test
     @DisplayName("검색결과가 없을 때, 빈 검색결과 반환하고, 캐시에 키워드가 존재할 때, 조회수 1증가")
     void test_search_whenNotExistSearchResultAndExistCacheKeywordThenReturnEmptyListAndAddCacheTotal() {
-        // given
-        final SearchCommand command = SearchCommand.builder()
-                                                   .query("kakao")
-                                                   .page(1)
-                                                   .size(10)
-                                                   .sort(SortType.ACCURACY)
-                                                   .build();
-
         // when
-        when(searchService.search(command)).thenReturn(Collections.EMPTY_LIST);
+        when(searchService.search(command)).thenReturn(new SearchResponse(null, Collections.EMPTY_LIST));
         redisTemplate.opsForZSet().add(key, "kakao", 100);
 
         // then
@@ -145,16 +146,8 @@ class GetBlogSearchControllerIntegrationTest {
     @Test
     @DisplayName("검색결과가 없을 때, 빈 검색결과 반환하고, 키워드가 존재하지 않을 때, 조회수 1")
     void test_search_whenNotExistSearchResultAndCacheKeywordThenReturnEmptyListAndCacheTotalIsOne() {
-        // given
-        final SearchCommand command = SearchCommand.builder()
-                                                   .query("kakao")
-                                                   .page(1)
-                                                   .size(10)
-                                                   .sort(SortType.ACCURACY)
-                                                   .build();
-
         // when
-        when(searchService.search(command)).thenReturn(Collections.EMPTY_LIST);
+        when(searchService.search(command)).thenReturn(new SearchResponse(null, Collections.EMPTY_LIST));
 
         // then
         final ResponseEntity<ResponseV1<BlogSearchBundleV1>> response =
@@ -171,16 +164,8 @@ class GetBlogSearchControllerIntegrationTest {
     @Test
     @DisplayName("검색결과가 있을 때, 검색결과 반환하고, 키워드가 존재할 때, 조회수 1증가")
     void test_search_whenExistSearchResultAndCacheKeywordThenReturnDataListAndAddCacheTotal() {
-        // given
-        final SearchCommand command = SearchCommand.builder()
-                                                   .query("kakao")
-                                                   .page(1)
-                                                   .size(10)
-                                                   .sort(SortType.ACCURACY)
-                                                   .build();
-
         // when
-        when(searchService.search(command)).thenReturn(List.of(createSearchDocument("무지")));
+        when(searchService.search(command)).thenReturn(new SearchResponse(null, List.of(createSearchDocument("무지"))));
         redisTemplate.opsForZSet().add(key, "kakao", 100);
 
         // then
@@ -199,16 +184,8 @@ class GetBlogSearchControllerIntegrationTest {
     @Test
     @DisplayName("검색결과가 있을 때, 검색결과 반환하고, 키워드가 존재하지 않을 때, 조회수 1")
     void test_search_whenExistSearchResultAndNotExistCacheKeywordThenReturnDataAndCacheTotalIsOne() {
-        // given
-        final SearchCommand command = SearchCommand.builder()
-                                                   .query("kakao")
-                                                   .page(1)
-                                                   .size(10)
-                                                   .sort(SortType.ACCURACY)
-                                                   .build();
-
         // when
-        when(searchService.search(command)).thenReturn(List.of(createSearchDocument("무지")));
+        when(searchService.search(command)).thenReturn(new SearchResponse(null, List.of(createSearchDocument("무지"))));
 
         // then
         final ResponseEntity<ResponseV1<BlogSearchBundleV1>> response =
