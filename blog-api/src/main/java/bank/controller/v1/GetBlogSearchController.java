@@ -6,7 +6,6 @@ import bank.controller.v1.mapper.BlogSearchV1Mapper;
 import bank.controller.v1.mapper.SearchPageV1Mapper;
 import bank.domain.search.SearchResponse;
 import bank.domain.search.SortType;
-import bank.exception.InvalidParameterException;
 import bank.service.search.GetSearchService;
 import bank.service.search.SearchCommand;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,11 +13,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/kakao/v1")
@@ -33,19 +37,11 @@ public class GetBlogSearchController {
         @ApiResponse(responseCode = "404", description = "NOT FOUND"),
         @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @GetMapping(value = "/search")
+    @GetMapping("/search")
     public ResponseV1<BlogSearchBundleV1> search(@RequestParam(name = "query") String query,
                                                  @RequestParam(name = "sort", defaultValue = "accuracy") SortType sort,
-                                                 @RequestParam(name = "page", defaultValue = "1") int page,
-                                                 @RequestParam(name = "size", defaultValue = "10") int size) {
-        if(page < 1 || page > 50 || size < 1 || size > 50) {
-            throw new InvalidParameterException("page 와 size 는 1 이상 50 이하이아야만 합니다");
-        }
-
-        if(sort == SortType.NONE) {
-            throw new InvalidParameterException("정렬조건은 accuracy, recency 중 하나이여야만 합니다.");
-        }
-
+                                                 @RequestParam(name = "page", defaultValue = "1") @Max(50) @Min(1) int page,
+                                                 @RequestParam(name = "size", defaultValue = "10") @Max(50) @Min(1) int size) {
         final SearchCommand command = SearchCommand.builder()
                                                    .query(query)
                                                    .sort(sort)

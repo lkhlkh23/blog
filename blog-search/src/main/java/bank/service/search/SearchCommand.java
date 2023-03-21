@@ -15,4 +15,7 @@ public class SearchCommand {
     private int page;
     private int size;
 
+    public void setSort(String sort) {
+        this.sort = SortType.ACCURACY;
+    }
 }
