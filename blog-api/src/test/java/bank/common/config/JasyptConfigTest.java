@@ -21,4 +21,5 @@ class JasyptConfigTest {
         // then
         assertEquals(key, jasypt.decrypt(jasypt.encrypt(key)));
     }
+
 }

@@ -1,7 +1,7 @@
 package bank.remote.kakao;
 
 import bank.domain.search.SearchDocument;
-import bank.remote.common.GenericMapper;
+import bank.mapper.GenericMapper;
 import bank.remote.kakao.dto.KakaoDocument;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

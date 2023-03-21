@@ -1,7 +1,7 @@
 package bank.remote.naver;
 
 import bank.domain.search.SearchDocument;
-import bank.remote.common.GenericMapper;
+import bank.mapper.GenericMapper;
 import bank.remote.naver.dto.NaverItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

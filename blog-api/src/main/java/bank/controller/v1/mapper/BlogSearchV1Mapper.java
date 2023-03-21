@@ -2,7 +2,7 @@ package bank.controller.v1.mapper;
 
 import bank.controller.v1.dto.BlogSearchV1;
 import bank.domain.search.SearchDocument;
-import bank.remote.common.GenericMapper;
+import bank.mapper.GenericMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

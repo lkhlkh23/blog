@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 class GetPopularKeywordServiceTest {
 
+    @Value("${spring.redis.key.keyword}")
+    private String key;
+
     @Autowired
     private GetPopularKeywordService sut;
 
@@ -26,7 +30,7 @@ class GetPopularKeywordServiceTest {
 
     @BeforeEach
     void setUp() {
-        redisTemplate.delete("keyword");
+        redisTemplate.delete(key);
     }
 
     @Test
@@ -40,7 +44,7 @@ class GetPopularKeywordServiceTest {
     void test_getPopularKeywords_whenExistKeywordOver10DataThenReturn10Data() {
         // when
         for (int i = 1; i <= 20; i++) {
-            redisTemplate.opsForZSet().add("keyword", "kakao-" + i, i);
+            redisTemplate.opsForZSet().add(key, "kakao-" + i, i);
         }
 
         // then
@@ -55,7 +59,7 @@ class GetPopularKeywordServiceTest {
     void test_getPopularKeywords_whenExistKeywordLessThan10DataThenReturnData() {
         // when
         for (int i = 1; i <= 5; i++) {
-            redisTemplate.opsForZSet().add("keyword", "kakao-" + i, i);
+            redisTemplate.opsForZSet().add(key, "kakao-" + i, i);
         }
 
         // then

@@ -1,4 +1,4 @@
-package bank.common.type;
+package bank.domain.search;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

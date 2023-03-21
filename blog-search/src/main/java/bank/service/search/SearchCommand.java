@@ -1,6 +1,6 @@
 package bank.service.search;
 
-import bank.common.type.SortType;
+import bank.domain.search.SortType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
