@@ -1,3 +1,0 @@
-spring:
-  redis:
-    setting: maxmemory 128M
