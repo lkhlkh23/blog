@@ -11,7 +11,7 @@
 $ git clone https://github.com/lkhlkh23/blog.git
 $ cd blog
 $ ./gradlew clean build
-$ java -jar blog-api/build/libs/blog-api-0.0.1-SNAPSHOT.jar
+$ java -jar blog-api/build/libs/blog-api.jar
 ```
 - base uri : http://localhost:8080
 - swagger uri : http://localhost:8080/swagger-ui/index.html
