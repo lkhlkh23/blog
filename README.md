@@ -1,10 +1,15 @@
 # 블로그 검색 API 개발
 ### 목차
+- [github 및 jar](#github-및-jar)
 - [빌드 및 실행](#빌드-및-실행)
 - [요구사항](#요구사항)
 - [개발내역](#개발내역)
 
-
+### github 및 jar
+- https://github.com/lkhlkh23/blog
+    - default branch : master
+- jar download link
+    - https://drive.google.com/file/d/1eOjSQ5OCUd8-8fzX4Ardj1wOgRrJUHU-/view?usp=share_link 
 
 ### 빌드 및 실행
 ```
