@@ -9,7 +9,7 @@
 - https://github.com/lkhlkh23/blog
     - default branch : master
 - jar download link
-    - https://drive.google.com/file/d/1eOjSQ5OCUd8-8fzX4Ardj1wOgRrJUHU-/view?usp=share_link 
+    - https://drive.google.com/file/d/1bmYkCmASblxxH9Q9qccua2Q_5me6mYMN/view?usp=sharing
 
 ### 빌드 및 실행
 ```
